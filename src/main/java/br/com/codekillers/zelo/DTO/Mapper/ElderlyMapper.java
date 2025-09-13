@@ -3,6 +3,7 @@ package br.com.codekillers.zelo.DTO.Mapper;
 import br.com.codekillers.zelo.DTO.Request.ElderlyRequest;
 import br.com.codekillers.zelo.DTO.Response.ElderlyResponse;
 import br.com.codekillers.zelo.Domain.Elderly;
+import br.com.codekillers.zelo.Utils.Date;
 import com.google.cloud.Timestamp;
 
 import java.time.LocalDate;
@@ -22,7 +23,7 @@ public class ElderlyMapper {
                 elderly.getId(),
                 elderly.getName(),
                 elderly.getEmail(),
-                elderly.getLastCheckIn(),
+                Date.formatFirestoreTimestamp(elderly.getLastCheckIn()),
                 isLastCheckInToday(elderly.getLastCheckIn())
         );
     }

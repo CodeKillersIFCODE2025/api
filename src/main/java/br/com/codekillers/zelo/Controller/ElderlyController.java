@@ -2,6 +2,7 @@ package br.com.codekillers.zelo.Controller;
 
 import br.com.codekillers.zelo.DTO.Request.ElderlyRequest;
 import br.com.codekillers.zelo.DTO.Request.ResponsibleRequest;
+import br.com.codekillers.zelo.DTO.Response.ElderlyResponse;
 import br.com.codekillers.zelo.DTO.Response.TaskResponse;
 import br.com.codekillers.zelo.Service.ElderlyService;
 import br.com.codekillers.zelo.Service.ResponsibleService;
@@ -40,5 +41,10 @@ public class ElderlyController {
     @PutMapping("/tasks/{taskID}")
     public boolean completeTaskForTheDay(@PathVariable String taskID){
         return taskService.completeTaskForTheDay(taskID);
+    }
+
+    @PutMapping("/checkin")
+    public ElderlyResponse dailyCheckIn(@AuthenticationPrincipal UserDetails userDetails){
+        return elderlyService.dailyCheckIn(userDetails.getUsername());
     }
 }
