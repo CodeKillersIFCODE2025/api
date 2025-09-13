@@ -104,13 +104,18 @@ public class TaskService {
                 return false; // verificação para só poder completar tarefas do dia de hoje
             }
 
-            task.setNextActionDue(Date.calculateNextDate(task.getNextActionDue(), task.getFrequencyUnit()));
-
             DocumentReference taskReferenceDoc = tasksCollection.document(task.getId());
+
+            if (!task.isRepeated()) {
+                taskReferenceDoc.delete();
+                return true; //se não for repetida, ao invés de alterar a data para a próxima, deleta a tarefa
+            }
+
+            task.setNextActionDue(Date.calculateNextDate(task.getNextActionDue(), task.getFrequencyUnit()));
             taskReferenceDoc.set(task);
 
             return true;
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }

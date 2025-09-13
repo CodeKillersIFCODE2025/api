@@ -15,7 +15,11 @@ public class TaskMapper {
         return Task.builder()
                 .description(taskRequest.getDescription())
                 .isRepeated(taskRequest.isRepeated())
-                .frequencyUnit(FrequencyUnit.valueOf(taskRequest.getFrequencyUnit().toUpperCase()))
+                .frequencyUnit(
+                        taskRequest.isRepeated()
+                                ? FrequencyUnit.valueOf(taskRequest.getFrequencyUnit().toUpperCase())
+                                : FrequencyUnit.UNIQUE
+                        )
                 .nextActionDue(Timestamp.of(taskRequest.getStartDate()))
                 .build();
     }
