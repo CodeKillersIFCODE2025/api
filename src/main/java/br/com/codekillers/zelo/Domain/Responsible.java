@@ -2,7 +2,7 @@ package br.com.codekillers.zelo.Domain;
 
 import lombok.*;
 
-@Getter @Setter @ToString @Builder
+@Getter @Setter @ToString
 public class Responsible extends User{
     private String phone;
     private String address;

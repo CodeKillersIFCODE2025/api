@@ -9,4 +9,5 @@ public class Task {
     private boolean isRepeated;
     private int frequency;
     private FrequencyUnit frequencyUnit;
+    private User user;
 }

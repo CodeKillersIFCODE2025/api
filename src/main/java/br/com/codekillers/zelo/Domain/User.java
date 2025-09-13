@@ -2,12 +2,11 @@ package br.com.codekillers.zelo.Domain;
 
 import lombok.*;
 
-@Getter @ToString
+@Getter @ToString @Setter
 public abstract class User {
     private String id;
     private String name;
     private String email;
-    @Setter
     private String password;
 
     public User(String name, String email, String password) {
@@ -15,5 +14,4 @@ public abstract class User {
         this.email = email;
         this.password = password;
     }
-
 }
