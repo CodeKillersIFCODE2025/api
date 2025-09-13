@@ -1,16 +1,10 @@
 package br.com.codekillers.zelo.Service;
 
 import br.com.codekillers.zelo.DTO.Mapper.ElderlyMapper;
-import br.com.codekillers.zelo.DTO.Mapper.ResponsibleMapper;
 import br.com.codekillers.zelo.DTO.Request.ElderlyRequest;
-import br.com.codekillers.zelo.DTO.Request.ResponsibleRequest;
 import br.com.codekillers.zelo.DTO.Response.ElderlyResponse;
-import br.com.codekillers.zelo.DTO.Response.ResponsibleResponse;
-import br.com.codekillers.zelo.DTO.Response.UserResponse;
 import br.com.codekillers.zelo.Domain.Elderly;
 import br.com.codekillers.zelo.Domain.Responsible;
-import br.com.codekillers.zelo.Domain.User;
-import br.com.codekillers.zelo.Utils.Date;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.*;
@@ -18,12 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-
-import java.util.*;
-
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
-
-import static br.com.codekillers.zelo.Utils.Cryptography.encryptPassword;
 
 @Service
 public class ElderlyService {
@@ -60,7 +52,6 @@ public class ElderlyService {
             return null;
 
         } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
             return e.getMessage();
         }
     }

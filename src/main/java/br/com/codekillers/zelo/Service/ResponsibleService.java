@@ -1,27 +1,16 @@
 package br.com.codekillers.zelo.Service;
 
 import br.com.codekillers.zelo.DTO.Mapper.ResponsibleMapper;
-import br.com.codekillers.zelo.DTO.Mapper.TaskMapper;
 import br.com.codekillers.zelo.DTO.Request.ResponsibleRequest;
-
-import br.com.codekillers.zelo.DTO.Request.TaskRequest;
-
-import br.com.codekillers.zelo.DTO.Response.ResponsibleResponse;
 import br.com.codekillers.zelo.Domain.Elderly;
 import br.com.codekillers.zelo.Domain.Responsible;
-import br.com.codekillers.zelo.Domain.Task;
 import com.google.api.core.ApiFuture;
-import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
-
-import static br.com.codekillers.zelo.Utils.Cryptography.encryptPassword;
 
 @Service
 public class ResponsibleService {
@@ -83,7 +72,7 @@ public class ResponsibleService {
 
     }
 
-    public ResponsibleResponse getResponsibleByElderly(String elderlyEmail) {
+    public Object getResponsibleByElderly(String elderlyEmail) {
 
         try {
             ApiFuture<QuerySnapshot> query = responsibles.get();
@@ -101,10 +90,9 @@ public class ResponsibleService {
 
             return responsible != null
                     ? ResponsibleMapper.toResponse(responsible)
-                    : null;
+                    : "Responsável não encontrado";
         } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+            return e.getMessage();
         }
     }
 }

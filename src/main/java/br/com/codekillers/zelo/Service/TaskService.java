@@ -9,7 +9,6 @@ import br.com.codekillers.zelo.Domain.Task;
 import br.com.codekillers.zelo.Utils.Date;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
-import org.apache.http.client.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -37,7 +36,7 @@ public class TaskService {
     @Autowired
     private ElderlyService elderlyService;
 
-    public void addTaskForElderly(TaskRequest taskRequest, UserDetails userDetails) {
+    public String addTaskForElderly(TaskRequest taskRequest, UserDetails userDetails) {
         try {
             Responsible responsible = responsibleService
                     .getResponsibleByEmail(userDetails.getUsername()).get();
@@ -55,8 +54,9 @@ public class TaskService {
             task.setId(documentId);
             documentReference.set(task);
 
+            return null;
         } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
+            return e.getMessage();
         }
     }
 
@@ -85,7 +85,7 @@ public class TaskService {
         }
     }
 
-    public boolean completeTaskForTheDay(String taskID) {
+    public String completeTaskForTheDay(String taskID) {
         try {
             ApiFuture<QuerySnapshot> query = tasksCollection.whereEqualTo("id", taskID).get();
             QuerySnapshot querySnapshot = query.get();
@@ -98,23 +98,22 @@ public class TaskService {
             Task task = foundTasks.getFirst();
 
             if (!Date.isToday(task.getNextActionDue())) {
-                return false; // verificação para só poder completar tarefas do dia de hoje
+                return "Você só pode completar uma task no dia dela!"; // verificação para só poder completar tarefas do dia de hoje
             }
 
             DocumentReference taskReferenceDoc = tasksCollection.document(task.getId());
 
             if (!task.isRepeated()) {
                 taskReferenceDoc.delete();
-                return true; //se não for repetida, ao invés de alterar a data para a próxima, deleta a tarefa
+                return null; //se não for repetida, ao invés de alterar a data para a próxima, deleta a tarefa
             }
 
             task.setNextActionDue(Date.calculateNextDate(task.getNextActionDue(), task.getFrequencyUnit()));
             taskReferenceDoc.set(task);
 
-            return true;
+            return null;
         } catch (Exception e) {
-            e.printStackTrace();
-            return false;
+            return e.getMessage();
         }
     }
 
