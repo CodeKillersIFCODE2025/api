@@ -10,10 +10,12 @@ import br.com.codekillers.zelo.Domain.Elderly;
 import br.com.codekillers.zelo.Domain.Responsible;
 import br.com.codekillers.zelo.Domain.Task;
 import com.google.api.core.ApiFuture;
+import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 
@@ -82,6 +84,5 @@ public class ResponsibleService {
         responsibleDocRef.update(updates);
 
     }
-
   
 }

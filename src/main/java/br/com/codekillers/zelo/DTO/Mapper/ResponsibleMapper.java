@@ -23,7 +23,9 @@ public class ResponsibleMapper {
                 responsible.getEmail(),
                 responsible.getPhone(),
                 responsible.getAddress(),
-                ElderlyMapper.toResponse(responsible.getElderly())
+                responsible.getElderly() != null
+                        ? ElderlyMapper.toResponse(responsible.getElderly())
+                        : null
         );
     }
 }
