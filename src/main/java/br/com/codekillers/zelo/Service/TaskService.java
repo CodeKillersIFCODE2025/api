@@ -147,6 +147,10 @@ public class TaskService {
     public HashMap<DayOfWeek, List<TaskResponse>> listTasksForTheWeek(String email) {
         Responsible responsible = responsibleService.getResponsibleByEmail(email).get();
 
+        if (responsible.getElderly() == null){
+            return toWeekList(new ArrayList<>());
+        }
+
         return toWeekList(
                 listTasksByElderly(responsible.getElderly().getId())
         );
