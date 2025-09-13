@@ -33,8 +33,13 @@ public class ElderlyController {
         elderlyService.createElderly(request, userDetails);
     }
 
-    @GetMapping("/day-tasks")
+    @GetMapping("/tasks/today")
     public List<TaskResponse> listElderyTasksForTheDay(@AuthenticationPrincipal UserDetails userDetails) {
         return taskService.listTasksForTheDay(userDetails.getUsername());
+    }
+
+    @PutMapping("/tasks/{taskID}")
+    public boolean completeTaskForTheDay(@PathVariable String taskID){
+        return taskService.completeTaskForTheDay(taskID);
     }
 }

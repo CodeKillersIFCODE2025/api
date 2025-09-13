@@ -70,7 +70,6 @@ public class ResponsibleService {
         } catch (Exception e){
             return Optional.empty();
         }
-
     }
 
 

@@ -31,7 +31,7 @@ public class ResponsibleController {
         }
     }
 
-    @PostMapping("/task")
+    @PostMapping("/tasks")
     @ResponseStatus(CREATED)
     public void createTask(@RequestBody TaskRequest taskRequest,
                            @AuthenticationPrincipal UserDetails userDetails) {

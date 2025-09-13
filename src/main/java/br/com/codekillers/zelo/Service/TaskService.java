@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
 @Service
@@ -23,13 +22,13 @@ public class TaskService {
 
     private static final String COLLECTION_NAME = "Task";
     private final Firestore firestore;
-    CollectionReference responsiblesCollection;
+    CollectionReference tasksCollection;
 
 
     @Autowired
     public TaskService(Firestore firestore) {
         this.firestore = firestore;
-        this.responsiblesCollection = firestore.collection(COLLECTION_NAME);
+        this.tasksCollection = firestore.collection(COLLECTION_NAME);
     }
 
     @Autowired
@@ -49,7 +48,7 @@ public class TaskService {
             Task task = TaskMapper.toEntity(taskRequest);
             task.setUserId(elderly.getId());
 
-            ApiFuture<DocumentReference> documentReferenceApiFuture = responsiblesCollection.add(task);
+            ApiFuture<DocumentReference> documentReferenceApiFuture = tasksCollection.add(task);
 
             DocumentReference documentReference = documentReferenceApiFuture.get();
 
@@ -68,7 +67,7 @@ public class TaskService {
         Elderly elderly = elderlyService.getElderlyByEmail(email).get();
 
         try {
-            ApiFuture<QuerySnapshot> query = responsiblesCollection.whereEqualTo("userId", elderly.getId())
+            ApiFuture<QuerySnapshot> query = tasksCollection.whereEqualTo("userId", elderly.getId())
                     .orderBy("nextActionDue")
                     .get();
             QuerySnapshot querySnapshot = query.get();
@@ -89,4 +88,31 @@ public class TaskService {
         }
     }
 
+    public boolean completeTaskForTheDay(String taskID) {
+        try {
+            ApiFuture<QuerySnapshot> query = tasksCollection.whereEqualTo("id", taskID).get();
+            QuerySnapshot querySnapshot = query.get();
+
+            List<Task> foundTasks = new ArrayList<>();
+            for (QueryDocumentSnapshot document : querySnapshot.getDocuments()) {
+                foundTasks.add(document.toObject(Task.class));
+            }
+
+            Task task = foundTasks.getFirst();
+
+            if (!Date.isToday(task.getNextActionDue())) {
+                return false; // verificação para só poder completar tarefas do dia de hoje
+            }
+
+            task.setNextActionDue(Date.calculateNextDate(task.getNextActionDue(), task.getFrequencyUnit()));
+
+            DocumentReference taskReferenceDoc = tasksCollection.document(task.getId());
+            taskReferenceDoc.set(task);
+
+            return true;
+        } catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

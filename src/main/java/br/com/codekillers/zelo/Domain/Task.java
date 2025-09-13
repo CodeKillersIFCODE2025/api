@@ -12,7 +12,6 @@ public class Task {
     private String id;
     private String description;
     private boolean isRepeated;
-    private int frequency;
     private FrequencyUnit frequencyUnit;
     private String userId;
     private Timestamp nextActionDue;
