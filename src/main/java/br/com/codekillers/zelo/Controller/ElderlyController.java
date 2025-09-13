@@ -3,12 +3,16 @@ package br.com.codekillers.zelo.Controller;
 import br.com.codekillers.zelo.DTO.Request.ElderlyRequest;
 import br.com.codekillers.zelo.DTO.Request.ResponsibleRequest;
 import br.com.codekillers.zelo.DTO.Response.ElderlyResponse;
+import br.com.codekillers.zelo.DTO.Response.ResponsibleResponse;
 import br.com.codekillers.zelo.DTO.Response.TaskResponse;
+import br.com.codekillers.zelo.DTO.Response.UserResponse;
 import br.com.codekillers.zelo.Service.ElderlyService;
 import br.com.codekillers.zelo.Service.ResponsibleService;
 import br.com.codekillers.zelo.Service.TaskService;
+import br.com.codekillers.zelo.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,11 +31,24 @@ public class ElderlyController {
     @Autowired
     private TaskService taskService;
 
+    @Autowired
+    private UserService userService;
+
     @PostMapping
     @ResponseStatus(CREATED)
     public void createElderly(@RequestBody ElderlyRequest request, @AuthenticationPrincipal UserDetails userDetails) {
         elderlyService.createElderly(request, userDetails);
     }
+
+    @GetMapping
+    public UserResponse getElderly(@AuthenticationPrincipal UserDetails userDetails) {
+        UserResponse user = userService.authenticateUser(userDetails.getUsername());
+
+        return user instanceof ElderlyResponse
+                ? user
+                : ((ResponsibleResponse) user).getElderly();
+    }
+
 
     @GetMapping("/tasks/today")
     public List<TaskResponse> listElderyTasksForTheDay(@AuthenticationPrincipal UserDetails userDetails) {
