@@ -7,4 +7,4 @@
 /dataSources/
 /dataSources.local.xml
 
-api/src/main/resources/serviceAccountKey.json
+src/main/resources/serviceAccountKey.json
