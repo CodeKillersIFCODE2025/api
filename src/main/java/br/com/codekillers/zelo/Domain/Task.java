@@ -6,6 +6,7 @@ import lombok.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@AllArgsConstructor @NoArgsConstructor
 @Getter @Setter @ToString @Builder
 public class Task {
     private String id;
@@ -14,5 +15,5 @@ public class Task {
     private int frequency;
     private FrequencyUnit frequencyUnit;
     private String userId;
-    private List<Timestamp> nextActionDue;
+    private Timestamp nextActionDue;
 }

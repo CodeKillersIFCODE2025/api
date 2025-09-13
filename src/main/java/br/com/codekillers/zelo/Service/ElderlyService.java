@@ -34,26 +34,33 @@ public class ElderlyService {
     private ResponsibleService responsibleService;
 
 
-    public String createElderly(ElderlyRequest request, UserDetails userDetails) throws InterruptedException, ExecutionException {
-        Responsible responsible = responsibleService.getResponsibleByEmail(userDetails.getUsername()).get();
+    public String createElderly(ElderlyRequest request, UserDetails userDetails) {
+        try {
 
-        Elderly elderly = ElderlyMapper.toEntity(request);
-        elderly.setPassword(encryptPassword(request.getPassword()));
+            Responsible responsible = responsibleService.getResponsibleByEmail(userDetails.getUsername()).get();
 
-        CollectionReference elderies = firestore.collection(COLLECTION_NAME);
-        ApiFuture<DocumentReference> documentReferenceApiFuture = elderies.add(elderly);
-        DocumentReference documentReference = documentReferenceApiFuture.get();
+            Elderly elderly = ElderlyMapper.toEntity(request);
+            elderly.setPassword(encryptPassword(request.getPassword()));
 
-        String documentId = documentReference.getId();
-        elderly.setId(documentId);
-        documentReference.set(elderly);
+            CollectionReference elderies = firestore.collection(COLLECTION_NAME);
+            ApiFuture<DocumentReference> documentReferenceApiFuture = elderies.add(elderly);
+            DocumentReference documentReference = documentReferenceApiFuture.get();
 
-        responsibleService.addElderly(responsible, elderly);
+            String documentId = documentReference.getId();
+            elderly.setId(documentId);
+            documentReference.set(elderly);
 
-        return documentId;
+            responsibleService.addElderly(responsible, elderly);
+
+            return documentId;
+
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
-    public void updateElderly(Elderly elderly){
+    public void updateElderly(Elderly elderly) {
         DocumentReference elderlyReferenceDoc = firestore.collection(COLLECTION_NAME)
                 .document(elderly.getId());
 
@@ -75,7 +82,7 @@ public class ElderlyService {
 
             return foundElderlies.stream().findFirst();
 
-        } catch (Exception e){
+        } catch (Exception e) {
             return Optional.empty();
         }
     }
