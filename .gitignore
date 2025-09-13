@@ -6,6 +6,6 @@
 /dataSources/
 /dataSources.local.xml
 
-/src/main/resources/serviceAccountKey.json
+/src/main/resources/SecretServiceKey.json
 
 /target

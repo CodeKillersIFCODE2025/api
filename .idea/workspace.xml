@@ -5,7 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4db47305-7e8f-4741-b46c-5c81d79ba3ac" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/resources/SecretServiceKey.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/codekillers/zelo/Configuration/FirebaseConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/codekillers/zelo/Configuration/FirebaseConfiguration.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -115,7 +118,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1757722362711</updated>
-      <workItem from="1757722367295" duration="24188000" />
+      <workItem from="1757722367295" duration="24581000" />
     </task>
     <servers />
   </component>
