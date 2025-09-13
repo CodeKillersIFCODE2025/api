@@ -4,6 +4,7 @@ import br.com.codekillers.zelo.DTO.Mapper.ElderlyMapper;
 import br.com.codekillers.zelo.DTO.Mapper.ResponsibleMapper;
 import br.com.codekillers.zelo.DTO.Request.ElderlyRequest;
 import br.com.codekillers.zelo.DTO.Request.ResponsibleRequest;
+import br.com.codekillers.zelo.DTO.Response.ResponsibleResponse;
 import br.com.codekillers.zelo.Domain.Elderly;
 import br.com.codekillers.zelo.Domain.Responsible;
 import com.google.api.core.ApiFuture;

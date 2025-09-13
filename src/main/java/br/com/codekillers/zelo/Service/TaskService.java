@@ -44,8 +44,7 @@ public class TaskService {
     public void addTaskForElderly(TaskRequest taskRequest, UserDetails userDetails) {
         try {
             Responsible responsible = responsibleService
-                    .getResponsibleByEmail(userDetails.getUsername())
-                    .get();
+                    .getResponsibleByEmail(userDetails.getUsername()).get();
 
             Elderly elderly = responsible.getElderly();
 
@@ -60,8 +59,6 @@ public class TaskService {
             task.setId(documentId);
             documentReference.set(task);
 
-            elderly.addTask(task);
-            elderlyService.updateElderly(elderly);
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
