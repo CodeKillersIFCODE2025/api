@@ -4,9 +4,12 @@ import br.com.codekillers.zelo.DTO.Request.ResponsibleRequest;
 import br.com.codekillers.zelo.DTO.Request.TaskRequest;
 import br.com.codekillers.zelo.DTO.Response.ResponsibleResponse;
 import br.com.codekillers.zelo.DTO.Response.TaskResponse;
+import br.com.codekillers.zelo.DTO.Response.UserResponse;
 import br.com.codekillers.zelo.Service.ResponsibleService;
 import br.com.codekillers.zelo.Service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +18,7 @@ import java.time.DayOfWeek;
 import java.util.HashMap;
 import java.util.List;
 
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CREATED;
 
 @RestController
@@ -28,24 +32,24 @@ public class ResponsibleController {
     private TaskService taskService;
 
     @PostMapping
-    @ResponseStatus(CREATED)
-    public void createResponsible(@RequestBody ResponsibleRequest request) {
-        try {
-            responsibleService.createResponsible(request);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public HttpStatus createResponsible(@RequestBody ResponsibleRequest request) {
+        String response = responsibleService.createResponsible(request);
+
+        return response != null
+                ? BAD_REQUEST
+                : CREATED;
     }
 
     @PostMapping("/tasks")
-    @ResponseStatus(CREATED)
-    public void createTask(@RequestBody TaskRequest taskRequest,
-                           @AuthenticationPrincipal UserDetails userDetails) {
+    public HttpStatus createTask(@RequestBody TaskRequest taskRequest,
+                                 @AuthenticationPrincipal UserDetails userDetails) {
         try {
             taskService.addTaskForElderly(taskRequest, userDetails);
+            return CREATED;
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return BAD_REQUEST;
     }
 
     @GetMapping("/tasks")

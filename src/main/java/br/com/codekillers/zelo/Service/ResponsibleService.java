@@ -15,6 +15,7 @@ import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -22,35 +23,36 @@ import java.util.concurrent.ExecutionException;
 
 import static br.com.codekillers.zelo.Utils.Cryptography.encryptPassword;
 
-@org.springframework.stereotype.Service
+@Service
 public class ResponsibleService {
 
-    private static final String COLLECTION_NAME = "Responsible";
-    CollectionReference responsibles;
-
+    private final CollectionReference responsibles;
 
     @Autowired
     public ResponsibleService(Firestore firestore) {
-        this.responsibles = firestore.collection(COLLECTION_NAME);
+        this.responsibles = firestore.collection("Responsible");
     }
 
+    public String createResponsible(ResponsibleRequest request) {
+        Optional<Responsible> existingResponsible = getResponsibleByEmail(request.getEmail());
 
-    public String createResponsible(ResponsibleRequest request) throws InterruptedException, ExecutionException {
+        if (existingResponsible.isPresent()) return "Email already in use";
+
         Responsible responsible = ResponsibleMapper.toEntity(request);
-        responsible.setPassword(
-            encryptPassword(request.getPassword())
-        );
 
-        ApiFuture<DocumentReference> documentReferenceApiFuture = responsibles.add(responsible);
+        try {
+            ApiFuture<DocumentReference> documentReferenceApiFuture = responsibles.add(responsible);
 
-        DocumentReference documentReference = documentReferenceApiFuture.get();
+            DocumentReference documentReference = documentReferenceApiFuture.get();
+            String documentId = documentReference.getId();
 
-        String documentId = documentReference.getId();
+            responsible.setId(documentId);
+            documentReference.set(responsible);
 
-        responsible.setId(documentId);
-        documentReference.set(responsible);
-
-        return documentId;
+            return null;
+        } catch (InterruptedException | ExecutionException e) {
+            return  e.getMessage();
+        }
     }
 
     public Optional<Responsible> getResponsibleByEmail(String email) {
@@ -65,11 +67,10 @@ public class ResponsibleService {
             }
 
             return foundResponsibles.stream().findFirst();
-        } catch (Exception e){
+        } catch (Exception e) {
             return Optional.empty();
         }
     }
-
 
     public void addElderly(Responsible responsible, Elderly elderly) {
         DocumentReference responsibleDocRef = responsibles
@@ -101,7 +102,7 @@ public class ResponsibleService {
             return responsible != null
                     ? ResponsibleMapper.toResponse(responsible)
                     : null;
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }

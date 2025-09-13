@@ -28,41 +28,41 @@ import static br.com.codekillers.zelo.Utils.Cryptography.encryptPassword;
 @Service
 public class ElderlyService {
 
-    private static final String COLLECTION_NAME = "Elderly";
-    CollectionReference elderies;
+    private final CollectionReference elderies;
 
     @Autowired
     public ElderlyService(Firestore firestore) {
-        this.elderies = firestore.collection(COLLECTION_NAME);
+        this.elderies = firestore.collection("Elderly");
     }
 
     @Autowired
     private ResponsibleService responsibleService;
 
-
     public String createElderly(ElderlyRequest request, UserDetails userDetails) {
-        try {
+        Optional<Elderly> existingElderly = getElderlyByEmail(request.getEmail());
 
+        if (existingElderly.isPresent()) return  "Email already in use";
+
+        try {
             Responsible responsible = responsibleService.getResponsibleByEmail(userDetails.getUsername()).get();
 
             Elderly elderly = ElderlyMapper.toEntity(request);
-            elderly.setPassword(encryptPassword(request.getPassword()));
 
             ApiFuture<DocumentReference> documentReferenceApiFuture = elderies.add(elderly);
-            DocumentReference documentReference = documentReferenceApiFuture.get();
 
+            DocumentReference documentReference = documentReferenceApiFuture.get();
             String documentId = documentReference.getId();
+
             elderly.setId(documentId);
             documentReference.set(elderly);
 
             responsibleService.addElderly(responsible, elderly);
-
-            return documentId;
+            return null;
 
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
+            return e.getMessage();
         }
-        return null;
     }
 
     public void updateElderly(Elderly elderly) {

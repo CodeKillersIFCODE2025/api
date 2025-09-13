@@ -24,15 +24,11 @@ import java.util.concurrent.ExecutionException;
 @Service
 public class TaskService {
 
-    private static final String COLLECTION_NAME = "Task";
-    private final Firestore firestore;
-    CollectionReference tasksCollection;
-
+    private final CollectionReference tasksCollection;
 
     @Autowired
     public TaskService(Firestore firestore) {
-        this.firestore = firestore;
-        this.tasksCollection = firestore.collection(COLLECTION_NAME);
+        this.tasksCollection = firestore.collection("Task");
     }
 
     @Autowired
@@ -88,8 +84,6 @@ public class TaskService {
             return new ArrayList<>();
         }
     }
-
-
 
     public boolean completeTaskForTheDay(String taskID) {
         try {
