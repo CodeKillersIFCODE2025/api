@@ -28,8 +28,7 @@ public class ElderlyController {
 
     @PostMapping
     @ResponseStatus(CREATED)
-    public void createElderly(@RequestBody ElderlyRequest request,
-                              @AuthenticationPrincipal UserDetails userDetails) {
+    public void createElderly(@RequestBody ElderlyRequest request, @AuthenticationPrincipal UserDetails userDetails) {
         elderlyService.createElderly(request, userDetails);
     }
 
