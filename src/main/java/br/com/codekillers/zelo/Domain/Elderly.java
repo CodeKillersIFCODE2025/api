@@ -1,5 +1,6 @@
 package br.com.codekillers.zelo.Domain;
 
+import com.google.cloud.Timestamp;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -12,12 +13,12 @@ import java.util.List;
 @Getter @Setter @ToString
 public class Elderly extends User{
     private List<Task> agenda;
-    private LocalDateTime lastCheckIn;
+    private Timestamp lastCheckIn;
 
     public Elderly(String name, String email, String password) {
         super(name, email, password);
         agenda = new ArrayList<>();
-        lastCheckIn = LocalDateTime.now();
+        lastCheckIn = Timestamp.now();
     }
 
     public Collection<? extends GrantedAuthority> getAuthorities() {
