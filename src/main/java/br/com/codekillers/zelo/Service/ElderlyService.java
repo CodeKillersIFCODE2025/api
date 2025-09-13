@@ -4,10 +4,13 @@ import br.com.codekillers.zelo.DTO.Mapper.ElderlyMapper;
 import br.com.codekillers.zelo.DTO.Mapper.ResponsibleMapper;
 import br.com.codekillers.zelo.DTO.Request.ElderlyRequest;
 import br.com.codekillers.zelo.DTO.Request.ResponsibleRequest;
+import br.com.codekillers.zelo.DTO.Response.ElderlyResponse;
 import br.com.codekillers.zelo.DTO.Response.ResponsibleResponse;
 import br.com.codekillers.zelo.Domain.Elderly;
 import br.com.codekillers.zelo.Domain.Responsible;
+import br.com.codekillers.zelo.Utils.Date;
 import com.google.api.core.ApiFuture;
+import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,11 +27,11 @@ import static br.com.codekillers.zelo.Utils.Cryptography.encryptPassword;
 public class ElderlyService {
 
     private static final String COLLECTION_NAME = "Elderly";
-    private final Firestore firestore;
+    CollectionReference elderies;
 
     @Autowired
     public ElderlyService(Firestore firestore) {
-        this.firestore = firestore;
+        this.elderies = firestore.collection(COLLECTION_NAME);
     }
 
     @Autowired
@@ -43,7 +46,6 @@ public class ElderlyService {
             Elderly elderly = ElderlyMapper.toEntity(request);
             elderly.setPassword(encryptPassword(request.getPassword()));
 
-            CollectionReference elderies = firestore.collection(COLLECTION_NAME);
             ApiFuture<DocumentReference> documentReferenceApiFuture = elderies.add(elderly);
             DocumentReference documentReference = documentReferenceApiFuture.get();
 
@@ -62,7 +64,7 @@ public class ElderlyService {
     }
 
     public void updateElderly(Elderly elderly) {
-        DocumentReference elderlyReferenceDoc = firestore.collection(COLLECTION_NAME)
+        DocumentReference elderlyReferenceDoc = elderies
                 .document(elderly.getId());
 
         elderlyReferenceDoc.set(elderly);
@@ -70,9 +72,7 @@ public class ElderlyService {
 
     public Optional<Elderly> getElderlyByEmail(String email) {
         try {
-            CollectionReference elderliesCollection = firestore.collection(COLLECTION_NAME);
-
-            ApiFuture<QuerySnapshot> query = elderliesCollection.whereEqualTo("email", email).get();
+            ApiFuture<QuerySnapshot> query = elderies.whereEqualTo("email", email).get();
 
             QuerySnapshot querySnapshot = query.get();
 
@@ -86,5 +86,14 @@ public class ElderlyService {
         } catch (Exception e) {
             return Optional.empty();
         }
+    }
+
+    public ElderlyResponse dailyCheckIn(String email) {
+        Elderly elderly = getElderlyByEmail(email).get();
+
+        elderly.setLastCheckIn(Timestamp.now());
+        updateElderly(elderly);
+
+        return ElderlyMapper.toResponse(elderly);
     }
 }
