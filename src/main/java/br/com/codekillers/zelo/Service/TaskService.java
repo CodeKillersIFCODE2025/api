@@ -4,12 +4,12 @@ import br.com.codekillers.zelo.DTO.Mapper.TaskMapper;
 import br.com.codekillers.zelo.DTO.Request.TaskRequest;
 import br.com.codekillers.zelo.DTO.Response.TaskResponse;
 import br.com.codekillers.zelo.Domain.Elderly;
+import br.com.codekillers.zelo.Domain.FrequencyUnit;
 import br.com.codekillers.zelo.Domain.Responsible;
 import br.com.codekillers.zelo.Domain.Task;
 import br.com.codekillers.zelo.Utils.Date;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
-import org.apache.http.client.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -24,15 +24,11 @@ import java.util.concurrent.ExecutionException;
 @Service
 public class TaskService {
 
-    private static final String COLLECTION_NAME = "Task";
-    private final Firestore firestore;
-    CollectionReference tasksCollection;
-
+    private final CollectionReference tasksCollection;
 
     @Autowired
     public TaskService(Firestore firestore) {
-        this.firestore = firestore;
-        this.tasksCollection = firestore.collection(COLLECTION_NAME);
+        this.tasksCollection = firestore.collection("Task");
     }
 
     @Autowired
@@ -41,7 +37,7 @@ public class TaskService {
     @Autowired
     private ElderlyService elderlyService;
 
-    public void addTaskForElderly(TaskRequest taskRequest, UserDetails userDetails) {
+    public String addTaskForElderly(TaskRequest taskRequest, UserDetails userDetails) {
         try {
             Responsible responsible = responsibleService
                     .getResponsibleByEmail(userDetails.getUsername()).get();
@@ -59,8 +55,9 @@ public class TaskService {
             task.setId(documentId);
             documentReference.set(task);
 
+            return null;
         } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
+            return e.getMessage();
         }
     }
 
@@ -89,9 +86,7 @@ public class TaskService {
         }
     }
 
-
-
-    public boolean completeTaskForTheDay(String taskID) {
+    public String completeTaskForTheDay(String taskID) {
         try {
             ApiFuture<QuerySnapshot> query = tasksCollection.whereEqualTo("id", taskID).get();
             QuerySnapshot querySnapshot = query.get();
@@ -104,23 +99,22 @@ public class TaskService {
             Task task = foundTasks.getFirst();
 
             if (!Date.isToday(task.getNextActionDue())) {
-                return false; // verificação para só poder completar tarefas do dia de hoje
+                return "Você só pode completar uma task no dia dela!"; // verificação para só poder completar tarefas do dia de hoje
             }
 
             DocumentReference taskReferenceDoc = tasksCollection.document(task.getId());
 
             if (!task.isRepeated()) {
                 taskReferenceDoc.delete();
-                return true; //se não for repetida, ao invés de alterar a data para a próxima, deleta a tarefa
+                return null; //se não for repetida, ao invés de alterar a data para a próxima, deleta a tarefa
             }
 
             task.setNextActionDue(Date.calculateNextDate(task.getNextActionDue(), task.getFrequencyUnit()));
             taskReferenceDoc.set(task);
 
-            return true;
+            return null;
         } catch (Exception e) {
-            e.printStackTrace();
-            return false;
+            return e.getMessage();
         }
     }
 
@@ -163,7 +157,7 @@ public class TaskService {
             LocalDate sevenDaysLater = LocalDate.now().plusDays(7);
 
 
-            return taskDate.isBefore(sevenDaysLater) && taskDate.isAfter(yesterday);
+            return (taskDate.isBefore(sevenDaysLater) && taskDate.isAfter(yesterday)) || task.getFrequencyUnit() == FrequencyUnit.DAILY;
         }).toList();
 
         HashMap<DayOfWeek, List<TaskResponse>> result = new HashMap<>();
@@ -176,16 +170,33 @@ public class TaskService {
         result.put(DayOfWeek.SUNDAY, new ArrayList<>());
 
         weekTasks.forEach(task -> {
-            switch (
-                    Date.toLocalDateTime(task.getNextActionDue()).getDayOfWeek()
-            ) {
-                case MONDAY -> result.get(DayOfWeek.MONDAY).add(TaskMapper.toResponse(task));
-                case TUESDAY -> result.get(DayOfWeek.TUESDAY).add(TaskMapper.toResponse(task));
-                case WEDNESDAY -> result.get(DayOfWeek.WEDNESDAY).add(TaskMapper.toResponse(task));
-                case THURSDAY -> result.get(DayOfWeek.THURSDAY).add(TaskMapper.toResponse(task));
-                case FRIDAY -> result.get(DayOfWeek.FRIDAY).add(TaskMapper.toResponse(task));
-                case SATURDAY -> result.get(DayOfWeek.SATURDAY).add(TaskMapper.toResponse(task));
-                case SUNDAY -> result.get(DayOfWeek.SUNDAY).add(TaskMapper.toResponse(task));
+             if (Date.toLocalDateTime(task.getNextActionDue()).getDayOfWeek() == DayOfWeek.MONDAY ||
+                    task.getFrequencyUnit() == FrequencyUnit.DAILY){
+                result.get(DayOfWeek.MONDAY).add(TaskMapper.toResponse(task));
+            }
+            if (Date.toLocalDateTime(task.getNextActionDue()).getDayOfWeek() == DayOfWeek.TUESDAY ||
+                    task.getFrequencyUnit() == FrequencyUnit.DAILY){
+                result.get(DayOfWeek.TUESDAY).add(TaskMapper.toResponse(task));
+            }
+            if (Date.toLocalDateTime(task.getNextActionDue()).getDayOfWeek() == DayOfWeek.WEDNESDAY ||
+                    task.getFrequencyUnit() == FrequencyUnit.DAILY){
+                result.get(DayOfWeek.WEDNESDAY).add(TaskMapper.toResponse(task));
+            }
+            if (Date.toLocalDateTime(task.getNextActionDue()).getDayOfWeek() == DayOfWeek.THURSDAY ||
+                    task.getFrequencyUnit() == FrequencyUnit.DAILY){
+                result.get(DayOfWeek.THURSDAY).add(TaskMapper.toResponse(task));
+            }
+            if (Date.toLocalDateTime(task.getNextActionDue()).getDayOfWeek() == DayOfWeek.FRIDAY ||
+                    task.getFrequencyUnit() == FrequencyUnit.DAILY){
+                result.get(DayOfWeek.FRIDAY).add(TaskMapper.toResponse(task));
+            }
+            if (Date.toLocalDateTime(task.getNextActionDue()).getDayOfWeek() == DayOfWeek.SATURDAY ||
+                    task.getFrequencyUnit() == FrequencyUnit.DAILY){
+                result.get(DayOfWeek.SATURDAY).add(TaskMapper.toResponse(task));
+            }
+            if (Date.toLocalDateTime(task.getNextActionDue()).getDayOfWeek() == DayOfWeek.SUNDAY ||
+                    task.getFrequencyUnit() == FrequencyUnit.DAILY){
+                result.get(DayOfWeek.SUNDAY).add(TaskMapper.toResponse(task));
             }
         });
 

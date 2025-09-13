@@ -5,12 +5,14 @@ import br.com.codekillers.zelo.DTO.Response.ResponsibleResponse;
 import br.com.codekillers.zelo.DTO.Response.UserResponse;
 import br.com.codekillers.zelo.Domain.Responsible;
 
+import static br.com.codekillers.zelo.Utils.Cryptography.encryptPassword;
+
 public class ResponsibleMapper {
     public static Responsible toEntity(ResponsibleRequest request) {
         return new Responsible(
                 request.getName(),
                 request.getEmail(),
-                request.getPassword(),
+                encryptPassword(request.getPassword()),
                 request.getPhone(),
                 request.getAddress()
         );

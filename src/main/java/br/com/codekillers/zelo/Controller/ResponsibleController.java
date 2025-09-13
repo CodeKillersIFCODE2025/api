@@ -7,6 +7,7 @@ import br.com.codekillers.zelo.DTO.Response.TaskResponse;
 import br.com.codekillers.zelo.Service.ResponsibleService;
 import br.com.codekillers.zelo.Service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +16,7 @@ import java.time.DayOfWeek;
 import java.util.HashMap;
 import java.util.List;
 
-import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.*;
 
 @RestController
 @RequestMapping("/responsibles")
@@ -28,24 +29,23 @@ public class ResponsibleController {
     private TaskService taskService;
 
     @PostMapping
-    @ResponseStatus(CREATED)
-    public void createResponsible(@RequestBody ResponsibleRequest request) {
-        try {
-            responsibleService.createResponsible(request);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public ResponseEntity<Object> createResponsible(@RequestBody ResponsibleRequest request) {
+        String response = responsibleService.createResponsible(request);
+
+        return response != null
+                ? new ResponseEntity<>(response, BAD_REQUEST)
+                : new ResponseEntity<>("Responsável criado com sucesso!", CREATED);
     }
 
     @PostMapping("/tasks")
-    @ResponseStatus(CREATED)
-    public void createTask(@RequestBody TaskRequest taskRequest,
-                           @AuthenticationPrincipal UserDetails userDetails) {
-        try {
-            taskService.addTaskForElderly(taskRequest, userDetails);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public ResponseEntity<Object> createTask(@RequestBody TaskRequest taskRequest,
+                                 @AuthenticationPrincipal UserDetails userDetails) {
+
+            String response = taskService.addTaskForElderly(taskRequest, userDetails);
+
+            return response != null
+                    ? new ResponseEntity<>(response, BAD_REQUEST)
+                    : new ResponseEntity<>("Tarefa criada com sucesso!", CREATED);
     }
 
     @GetMapping("/tasks")
@@ -54,9 +54,11 @@ public class ResponsibleController {
     }
 
     @GetMapping
-    public ResponsibleResponse getResponsible(@AuthenticationPrincipal UserDetails userDetails) {
-        return responsibleService.getResponsibleByElderly(userDetails.getUsername());
+    public ResponseEntity<Object> getResponsible(@AuthenticationPrincipal UserDetails userDetails) {
+        Object response = responsibleService.getResponsibleByElderly(userDetails.getUsername());
+
+        return response instanceof ResponsibleResponse
+                ?  new ResponseEntity<>(response, OK)
+                : new ResponseEntity<>(response, BAD_REQUEST);
     }
-
-
 }

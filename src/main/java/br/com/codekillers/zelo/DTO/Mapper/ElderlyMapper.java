@@ -9,12 +9,14 @@ import com.google.cloud.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import static br.com.codekillers.zelo.Utils.Cryptography.encryptPassword;
+
 public class ElderlyMapper {
     public static Elderly toEntity(ElderlyRequest request) {
         return new Elderly(
                 request.getName(),
                 request.getEmail(),
-                request.getPassword()
+                encryptPassword(request.getPassword())
         );
     }
 
