@@ -1,7 +1,9 @@
 package br.com.codekillers.zelo.Service;
 
+import br.com.codekillers.zelo.DTO.Mapper.ElderlyMapper;
 import br.com.codekillers.zelo.DTO.Mapper.ResponsibleMapper;
 import br.com.codekillers.zelo.DTO.Response.UserResponse;
+import br.com.codekillers.zelo.Domain.Elderly;
 import br.com.codekillers.zelo.Domain.Responsible;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,6 +21,9 @@ public class UserService implements UserDetailsService {
     @Autowired
     private ResponsibleService responsibleService;
 
+    @Autowired
+    private ElderlyService elderlyService;
+
     @Override
     public UserDetails loadUserByUsername(String username) {
         try {
@@ -28,8 +33,11 @@ public class UserService implements UserDetailsService {
                return responsibleOptional.get();
             }
 
-            //login idoso
+            Optional<Elderly> elderlyOptional = elderlyService.getElderlyByEmail(username);
 
+            if (elderlyOptional.isPresent()) {
+                return elderlyOptional.get();
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -45,8 +53,11 @@ public class UserService implements UserDetailsService {
                 return toResponse(responsibleOptional.get());
             }
 
-            //login idoso
+            Optional<Elderly> elderlyOptional = elderlyService.getElderlyByEmail(username);
 
+            if (elderlyOptional.isPresent()) {
+                return ElderlyMapper.toResponse(elderlyOptional.get());
+            }
 
         } catch (Exception e) {
             e.printStackTrace();

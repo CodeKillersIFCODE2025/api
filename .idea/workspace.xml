@@ -5,15 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4db47305-7e8f-4741-b46c-5c81d79ba3ac" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/br/com/codekillers/zelo/Controller/AuthController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/br/com/codekillers/zelo/DTO/Response/ElderlyResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/br/com/codekillers/zelo/DTO/Response/ResponsibleResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/br/com/codekillers/zelo/DTO/Response/UserResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/codekillers/zelo/Configuration/FirebaseConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/codekillers/zelo/Configuration/FirebaseConfiguration.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/codekillers/zelo/DTO/Mapper/ElderlyMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/codekillers/zelo/DTO/Mapper/ElderlyMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/codekillers/zelo/DTO/Mapper/ResponsibleMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/codekillers/zelo/DTO/Mapper/ResponsibleMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/codekillers/zelo/Service/ElderlyService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/codekillers/zelo/Service/ElderlyService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/br/com/codekillers/zelo/Service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/codekillers/zelo/Service/UserService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -69,7 +62,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "Spring Boot.ZeloApplication.executor": "Run",
+    "Spring Boot.ZeloApplication.executor": "Debug",
     "git-widget-placeholder": "user",
     "ignore.virus.scanning.warn.message": "true",
     "junie.onboarding.icon.badge.shown": "true",
@@ -125,7 +118,7 @@
       <option name="presentableId" value="Default" />
       <updated>1757722362711</updated>
       <workItem from="1757722367295" duration="24873000" />
-      <workItem from="1757748837109" duration="2100000" />
+      <workItem from="1757748837109" duration="2733000" />
     </task>
     <servers />
   </component>
@@ -152,5 +145,16 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/br/com/codekillers/zelo/Service/UserService.java</url>
+          <line>35</line>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
