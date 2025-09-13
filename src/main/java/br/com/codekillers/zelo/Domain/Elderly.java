@@ -44,4 +44,8 @@ public class Elderly extends User{
     public boolean isEnabled() {
         return true;
     }
+
+    public void addTask(Task task){
+        this.agenda.add(task);
+    }
 }

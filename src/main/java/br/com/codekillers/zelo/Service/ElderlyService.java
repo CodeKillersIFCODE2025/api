@@ -14,6 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+
+import java.util.HashMap;
+import java.util.Map;
+
 import java.util.concurrent.ExecutionException;
 
 import static br.com.codekillers.zelo.Utils.Cryptography.encryptPassword;
@@ -50,5 +54,12 @@ public class ElderlyService {
         responsibleService.addElderly(responsible, elderly);
 
         return documentId;
+    }
+
+    public void updateElderly(Elderly elderly){
+        DocumentReference elderlyReferenceDoc = firestore.collection(COLLECTION_NAME)
+                .document(elderly.getId());
+
+        elderlyReferenceDoc.set(elderly);
     }
 }
