@@ -4,6 +4,7 @@ import br.com.codekillers.zelo.DTO.Mapper.TaskMapper;
 import br.com.codekillers.zelo.DTO.Request.TaskRequest;
 import br.com.codekillers.zelo.DTO.Response.TaskResponse;
 import br.com.codekillers.zelo.Domain.Elderly;
+import br.com.codekillers.zelo.Domain.FrequencyUnit;
 import br.com.codekillers.zelo.Domain.Responsible;
 import br.com.codekillers.zelo.Domain.Task;
 import br.com.codekillers.zelo.Utils.Date;
@@ -156,7 +157,7 @@ public class TaskService {
             LocalDate sevenDaysLater = LocalDate.now().plusDays(7);
 
 
-            return taskDate.isBefore(sevenDaysLater) && taskDate.isAfter(yesterday);
+            return (taskDate.isBefore(sevenDaysLater) && taskDate.isAfter(yesterday)) || task.getFrequencyUnit() == FrequencyUnit.DAILY;
         }).toList();
 
         HashMap<DayOfWeek, List<TaskResponse>> result = new HashMap<>();
@@ -169,16 +170,33 @@ public class TaskService {
         result.put(DayOfWeek.SUNDAY, new ArrayList<>());
 
         weekTasks.forEach(task -> {
-            switch (
-                    Date.toLocalDateTime(task.getNextActionDue()).getDayOfWeek()
-            ) {
-                case MONDAY -> result.get(DayOfWeek.MONDAY).add(TaskMapper.toResponse(task));
-                case TUESDAY -> result.get(DayOfWeek.TUESDAY).add(TaskMapper.toResponse(task));
-                case WEDNESDAY -> result.get(DayOfWeek.WEDNESDAY).add(TaskMapper.toResponse(task));
-                case THURSDAY -> result.get(DayOfWeek.THURSDAY).add(TaskMapper.toResponse(task));
-                case FRIDAY -> result.get(DayOfWeek.FRIDAY).add(TaskMapper.toResponse(task));
-                case SATURDAY -> result.get(DayOfWeek.SATURDAY).add(TaskMapper.toResponse(task));
-                case SUNDAY -> result.get(DayOfWeek.SUNDAY).add(TaskMapper.toResponse(task));
+             if (Date.toLocalDateTime(task.getNextActionDue()).getDayOfWeek() == DayOfWeek.MONDAY ||
+                    task.getFrequencyUnit() == FrequencyUnit.DAILY){
+                result.get(DayOfWeek.MONDAY).add(TaskMapper.toResponse(task));
+            }
+            if (Date.toLocalDateTime(task.getNextActionDue()).getDayOfWeek() == DayOfWeek.TUESDAY ||
+                    task.getFrequencyUnit() == FrequencyUnit.DAILY){
+                result.get(DayOfWeek.TUESDAY).add(TaskMapper.toResponse(task));
+            }
+            if (Date.toLocalDateTime(task.getNextActionDue()).getDayOfWeek() == DayOfWeek.WEDNESDAY ||
+                    task.getFrequencyUnit() == FrequencyUnit.DAILY){
+                result.get(DayOfWeek.WEDNESDAY).add(TaskMapper.toResponse(task));
+            }
+            if (Date.toLocalDateTime(task.getNextActionDue()).getDayOfWeek() == DayOfWeek.THURSDAY ||
+                    task.getFrequencyUnit() == FrequencyUnit.DAILY){
+                result.get(DayOfWeek.THURSDAY).add(TaskMapper.toResponse(task));
+            }
+            if (Date.toLocalDateTime(task.getNextActionDue()).getDayOfWeek() == DayOfWeek.FRIDAY ||
+                    task.getFrequencyUnit() == FrequencyUnit.DAILY){
+                result.get(DayOfWeek.FRIDAY).add(TaskMapper.toResponse(task));
+            }
+            if (Date.toLocalDateTime(task.getNextActionDue()).getDayOfWeek() == DayOfWeek.SATURDAY ||
+                    task.getFrequencyUnit() == FrequencyUnit.DAILY){
+                result.get(DayOfWeek.SATURDAY).add(TaskMapper.toResponse(task));
+            }
+            if (Date.toLocalDateTime(task.getNextActionDue()).getDayOfWeek() == DayOfWeek.SUNDAY ||
+                    task.getFrequencyUnit() == FrequencyUnit.DAILY){
+                result.get(DayOfWeek.SUNDAY).add(TaskMapper.toResponse(task));
             }
         });
 

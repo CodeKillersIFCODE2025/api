@@ -6,12 +6,10 @@ import br.com.codekillers.zelo.Domain.FrequencyUnit;
 import br.com.codekillers.zelo.Domain.Task;
 import br.com.codekillers.zelo.Utils.Date;
 import com.google.cloud.Timestamp;
-import com.google.type.DateTime;
-
-import java.time.LocalDateTime;
 
 public class TaskMapper {
     public static Task toEntity(TaskRequest taskRequest) {
+        System.out.println(taskRequest.isRepeated());
         return Task.builder()
                 .description(taskRequest.getDescription())
                 .isRepeated(taskRequest.isRepeated())
