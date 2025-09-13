@@ -18,7 +18,7 @@ public class FirebaseConfiguration {
 
     @Bean
     public FirebaseApp firebaseApp() throws IOException {
-        InputStream serviceAccount = new ClassPathResource("SecretServiceKey.json")
+        InputStream serviceAccount = new ClassPathResource("serviceAccountKey.json")
                 .getInputStream();
 
         FirebaseOptions options = FirebaseOptions.builder()
