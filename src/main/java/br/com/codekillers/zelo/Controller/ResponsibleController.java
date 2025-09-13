@@ -17,12 +17,12 @@ public class ResponsibleController {
 
     @PostMapping
     @ResponseStatus(CREATED)
-    public void addNewUser(@RequestBody ResponsibleRequest request) {
+    public void createResponsible(@RequestBody ResponsibleRequest request) {
         try {
             responsibleService.createResponsible(request);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    
+
 }

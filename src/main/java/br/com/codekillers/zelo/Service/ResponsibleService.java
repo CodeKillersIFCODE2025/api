@@ -2,14 +2,13 @@ package br.com.codekillers.zelo.Service;
 
 import br.com.codekillers.zelo.DTO.Mapper.ResponsibleMapper;
 import br.com.codekillers.zelo.DTO.Request.ResponsibleRequest;
+import br.com.codekillers.zelo.Domain.Elderly;
 import br.com.codekillers.zelo.Domain.Responsible;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 
 import static br.com.codekillers.zelo.Utils.Cryptography.encryptPassword;
@@ -46,20 +45,34 @@ public class ResponsibleService {
         return documentId;
     }
 
-    public Optional<Responsible> getResponsibleByEmail(String email) throws InterruptedException, ExecutionException {
-        CollectionReference responsiblesCollection = firestore.collection(COLLECTION_NAME);
+    public Optional<Responsible> getResponsibleByEmail(String email) {
+        try {
+            CollectionReference responsiblesCollection = firestore.collection(COLLECTION_NAME);
 
-        ApiFuture<QuerySnapshot> query = responsiblesCollection.whereEqualTo("email", email).get();
+            ApiFuture<QuerySnapshot> query = responsiblesCollection.whereEqualTo("email", email).get();
 
-        QuerySnapshot querySnapshot = query.get();
+            QuerySnapshot querySnapshot = query.get();
 
-        List<Responsible> foundResponsibles = new ArrayList<>();
-        for (QueryDocumentSnapshot document : querySnapshot.getDocuments()) {
-            foundResponsibles.add(document.toObject(Responsible.class));
+            List<Responsible> foundResponsibles = new ArrayList<>();
+            for (QueryDocumentSnapshot document : querySnapshot.getDocuments()) {
+                foundResponsibles.add(document.toObject(Responsible.class));
+            }
+
+            return foundResponsibles.stream().findFirst();
+        } catch (Exception e){
+            return Optional.empty();
         }
 
-        return foundResponsibles.stream().findFirst();
     }
 
 
+    public void addElderly(Responsible responsible, Elderly elderly) {
+        DocumentReference responsibleDocRef = firestore.collection(COLLECTION_NAME)
+                .document(responsible.getId());
+
+        Map<String, Object> updates = new HashMap<>();
+        updates.put("elderly", elderly);
+
+        responsibleDocRef.update(updates);
+    }
 }
