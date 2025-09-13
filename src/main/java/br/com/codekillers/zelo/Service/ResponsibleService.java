@@ -6,6 +6,7 @@ import br.com.codekillers.zelo.DTO.Request.ResponsibleRequest;
 
 import br.com.codekillers.zelo.DTO.Request.TaskRequest;
 
+import br.com.codekillers.zelo.DTO.Response.ResponsibleResponse;
 import br.com.codekillers.zelo.Domain.Elderly;
 import br.com.codekillers.zelo.Domain.Responsible;
 import br.com.codekillers.zelo.Domain.Task;
@@ -25,11 +26,12 @@ import static br.com.codekillers.zelo.Utils.Cryptography.encryptPassword;
 public class ResponsibleService {
 
     private static final String COLLECTION_NAME = "Responsible";
-    private final Firestore firestore;
+    CollectionReference responsibles;
+
 
     @Autowired
     public ResponsibleService(Firestore firestore) {
-        this.firestore = firestore;
+        this.responsibles = firestore.collection(COLLECTION_NAME);
     }
 
 
@@ -38,8 +40,6 @@ public class ResponsibleService {
         responsible.setPassword(
             encryptPassword(request.getPassword())
         );
-
-        CollectionReference responsibles = firestore.collection(COLLECTION_NAME);
 
         ApiFuture<DocumentReference> documentReferenceApiFuture = responsibles.add(responsible);
 
@@ -55,9 +55,7 @@ public class ResponsibleService {
 
     public Optional<Responsible> getResponsibleByEmail(String email) {
         try {
-            CollectionReference responsiblesCollection = firestore.collection(COLLECTION_NAME);
-
-            ApiFuture<QuerySnapshot> query = responsiblesCollection.whereEqualTo("email", email).get();
+            ApiFuture<QuerySnapshot> query = responsibles.whereEqualTo("email", email).get();
 
             QuerySnapshot querySnapshot = query.get();
 
@@ -74,7 +72,7 @@ public class ResponsibleService {
 
 
     public void addElderly(Responsible responsible, Elderly elderly) {
-        DocumentReference responsibleDocRef = firestore.collection(COLLECTION_NAME)
+        DocumentReference responsibleDocRef = responsibles
                 .document(responsible.getId());
 
         Map<String, Object> updates = new HashMap<>();
@@ -83,5 +81,29 @@ public class ResponsibleService {
         responsibleDocRef.update(updates);
 
     }
-  
+
+    public ResponsibleResponse getResponsibleByElderly(String elderlyEmail) {
+
+        try {
+            ApiFuture<QuerySnapshot> query = responsibles.get();
+
+            QuerySnapshot querySnapshot = query.get();
+
+            List<Responsible> foundResponsibles = new ArrayList<>();
+            for (QueryDocumentSnapshot document : querySnapshot.getDocuments()) {
+                foundResponsibles.add(document.toObject(Responsible.class));
+            }
+
+            Responsible responsible = foundResponsibles.stream()
+                    .filter(r -> r.getElderly().getEmail().equals(elderlyEmail))
+                    .findFirst().orElse(null);
+
+            return responsible != null
+                    ? ResponsibleMapper.toResponse(responsible)
+                    : null;
+        } catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

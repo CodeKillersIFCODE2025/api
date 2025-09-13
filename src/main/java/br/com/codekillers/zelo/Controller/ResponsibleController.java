@@ -2,6 +2,7 @@ package br.com.codekillers.zelo.Controller;
 
 import br.com.codekillers.zelo.DTO.Request.ResponsibleRequest;
 import br.com.codekillers.zelo.DTO.Request.TaskRequest;
+import br.com.codekillers.zelo.DTO.Response.ResponsibleResponse;
 import br.com.codekillers.zelo.DTO.Response.TaskResponse;
 import br.com.codekillers.zelo.Service.ResponsibleService;
 import br.com.codekillers.zelo.Service.TaskService;
@@ -51,4 +52,11 @@ public class ResponsibleController {
     public HashMap<DayOfWeek, List<TaskResponse>> listWeekTasks(@AuthenticationPrincipal UserDetails userDetails) {
         return taskService.listTasksForTheWeek(userDetails.getUsername());
     }
+
+    @GetMapping
+    public ResponsibleResponse getResponsible(@AuthenticationPrincipal UserDetails userDetails) {
+        return responsibleService.getResponsibleByElderly(userDetails.getUsername());
+    }
+
+
 }

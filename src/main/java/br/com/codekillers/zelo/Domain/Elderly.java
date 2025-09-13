@@ -12,12 +12,10 @@ import java.util.List;
 @NoArgsConstructor @AllArgsConstructor
 @Getter @Setter @ToString
 public class Elderly extends User{
-    private List<Task> agenda;
     private Timestamp lastCheckIn;
 
     public Elderly(String name, String email, String password) {
         super(name, email, password);
-        agenda = new ArrayList<>();
         lastCheckIn = Timestamp.now();
     }
 
@@ -43,9 +41,5 @@ public class Elderly extends User{
 
     public boolean isEnabled() {
         return true;
-    }
-
-    public void addTask(Task task){
-        this.agenda.add(task);
     }
 }
