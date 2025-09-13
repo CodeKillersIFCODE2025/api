@@ -7,16 +7,13 @@ import br.com.codekillers.zelo.DTO.Request.ResponsibleRequest;
 import br.com.codekillers.zelo.Domain.Elderly;
 import br.com.codekillers.zelo.Domain.Responsible;
 import com.google.api.core.ApiFuture;
-import com.google.cloud.firestore.CollectionReference;
-import com.google.cloud.firestore.DocumentReference;
-import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import java.util.concurrent.ExecutionException;
 
@@ -61,5 +58,25 @@ public class ElderlyService {
                 .document(elderly.getId());
 
         elderlyReferenceDoc.set(elderly);
+    }
+
+    public Optional<Elderly> getElderlyByEmail(String email) {
+        try {
+            CollectionReference elderliesCollection = firestore.collection(COLLECTION_NAME);
+
+            ApiFuture<QuerySnapshot> query = elderliesCollection.whereEqualTo("email", email).get();
+
+            QuerySnapshot querySnapshot = query.get();
+
+            List<Elderly> foundElderlies = new ArrayList<>();
+            for (QueryDocumentSnapshot document : querySnapshot.getDocuments()) {
+                foundElderlies.add(document.toObject(Elderly.class));
+            }
+
+            return foundElderlies.stream().findFirst();
+
+        } catch (Exception e){
+            return Optional.empty();
+        }
     }
 }

@@ -5,6 +5,6 @@
 /shelf/
 /.idea/workspace.xml
 
-/src/main/resources/SecretServiceKey.json
+/src/main/resources/serviceAccountKey.json
 
 /target

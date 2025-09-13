@@ -5,7 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4db47305-7e8f-4741-b46c-5c81d79ba3ac" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/codekillers/zelo/Configuration/SecurityConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/codekillers/zelo/Configuration/SecurityConfiguration.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/codekillers/zelo/Service/ElderlyService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/codekillers/zelo/Service/ElderlyService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/codekillers/zelo/Service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/codekillers/zelo/Service/UserService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,25 +25,25 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "lpmilitao"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;lpmilitao&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/CodeKillersIFCODE2025/api.git",
-    "accountId": "a702c3ee-08af-4493-9bf2-03d64d06bde2"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/CodeKillersIFCODE2025/api.git&quot;,
+    &quot;accountId&quot;: &quot;a702c3ee-08af-4493-9bf2-03d64d06bde2&quot;
   }
-}]]></component>
-  <component name="KubernetesApiPersistence"><![CDATA[{}]]></component>
-  <component name="KubernetesApiProvider"><![CDATA[{
-  "isMigrated": true
-}]]></component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 3
-}]]></component>
+}</component>
+  <component name="KubernetesApiPersistence">{}</component>
+  <component name="KubernetesApiProvider">{
+  &quot;isMigrated&quot;: true
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 3
+}</component>
   <component name="ProjectId" id="32caYKRlyVHco0N8IRMCUmXSvTj" />
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
@@ -60,8 +62,8 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "Spring Boot.ZeloApplication.executor": "Run",
-    "git-widget-placeholder": "tasks",
+    "Spring Boot.ZeloApplication.executor": "Debug",
+    "git-widget-placeholder": "user",
     "ignore.virus.scanning.warn.message": "true",
     "junie.onboarding.icon.badge.shown": "true",
     "kotlin-language-version-configured": "true",
@@ -78,11 +80,11 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
+      <recent name="br.com.codekillers.zelo.DTO.Response" />
       <recent name="br.com.codekillers.zelo.DTO.Request" />
       <recent name="br.com.codekillers.zelo.DTO.Mapper" />
       <recent name="br.com.codekillers.zelo.Service" />
       <recent name="br.com.codekillers.zelo.Controller" />
-      <recent name="br.com.codekillers.zelo.Domain" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\luiza\Hackatona\api\src\main\resources" />
@@ -116,6 +118,7 @@
       <option name="presentableId" value="Default" />
       <updated>1757722362711</updated>
       <workItem from="1757722367295" duration="24873000" />
+      <workItem from="1757748837109" duration="2733000" />
     </task>
     <servers />
   </component>
@@ -142,5 +145,16 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/br/com/codekillers/zelo/Service/UserService.java</url>
+          <line>35</line>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
